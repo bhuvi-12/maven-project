@@ -8,7 +8,7 @@ pipeline {
         }
         stage('post-build') {
             steps {
-               echo 'post-build actions'
+               echo 'doing post-build actions'
             }
         }
     }
