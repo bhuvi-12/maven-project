@@ -8,7 +8,7 @@
   <packaging>pom</packaging>
   <version>1.0-SNAPSHOT</version>
   <name>Maven Project new 2</name>
-  <description>Sample Maven project with a working, deployable website.</description>
+  <description>Sample Maven project with a working, deployable website extras.</description>
   <url>http://www.example.com</url>
 
   <properties>
