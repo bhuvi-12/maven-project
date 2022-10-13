@@ -17,9 +17,7 @@ pipeline {
                 }
             }
         }
-    }
-    post{
-        success{
+        stage('Deploy artifacts to Artifactory'){
             steps{
                 echo 'This is a post-build actions'
                 sh 'jfrog rt upload --url http://jfrog.centralindia.cloudapp.azure.com:8081/artifactory/ target/demo-0.0.1-SNAPSHOT.jar libs-snapshot-local'
