@@ -18,14 +18,12 @@ pipeline {
         stage('Build') { 
             steps { 
                 echo 'Build stage' 
-                sh 'mvn -Dmaven.test.failure.ignore=true install'
-                // dir("/var/lib/jenkins/workspace/multibranch-pipeline2_${branch}")
-                // sh 'mvn -B -DskipTests clean package'
+                sh 'mvn clean package'
+                // sh 'mvn -Dmaven.test.failure.ignore=true install'
             }
         }
         stage('Deploy artifacts to Artifactory'){
             steps{
-                echo 'This is a post-build actions in dev branch'
                 rtUpload(
                     serverId: 'jfrog-jenkins',
                     spec: """{
