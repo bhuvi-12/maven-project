@@ -55,5 +55,13 @@ pipeline {
                 )
             }
         }
+        stage ('Deploy to production'){
+            when{
+                branch 'master'
+            }
+            steps{
+                echo 'Production deployment'
+            }
+        }
     }
 }
