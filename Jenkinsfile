@@ -6,7 +6,7 @@ pipeline {
     stages { 
         stage('Build') { 
             steps { 
-               echo 'This is a minimal pipeline.' 
+               echo 'Build stage' 
             }
         }
         stage('SonarQube analysis') {
