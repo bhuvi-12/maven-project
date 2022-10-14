@@ -21,7 +21,10 @@ pipeline {
                 sh 'mvn clean package'
             }
         }
-        stage('Deploy artifacts to Artifactory'){
+        stage('Deploy artifacts to Artifactory to dev'){
+            when{
+                branch 'dev'
+            }
             steps{
                 rtUpload(
                     serverId: 'jfrog-jenkins',
@@ -29,6 +32,35 @@ pipeline {
                         "files": [
                                 {
                                     "pattern": "/var/lib/jenkins/workspace/multibranch-pipeline2_dev/server/target/*.jar",
+                                    "target": "libs-snapshot-local"
+                                }
+                        ]
+                    }"""
+                )
+                rtUpload(
+                    serverId: 'jfrog-jenkins',
+                    spec: """{
+                        "files": [
+                                {
+                                    "pattern": "/var/lib/jenkins/workspace/multibranch-pipeline2_dev/webapp/target/*.jar",
+                                    "target": "libs-snapshot-local"
+                                }
+                        ]
+                    }"""
+                )
+            }
+        }
+        stage('Deploy artifacts to Artifactory to Master'){
+            when{
+                branch 'master'
+            }
+            steps{
+                rtUpload(
+                    serverId: 'jfrog-jenkins',
+                    spec: """{
+                        "files": [
+                                {
+                                    "pattern": "/var/lib/jenkins/workspace/multibranch-pipeline2_master/server/target/*.jar",
                                     "target": "libs-snapshot-local"
                                 }
                         ]
