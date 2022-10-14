@@ -32,5 +32,28 @@ pipeline {
                 )
             }
         }
+        stage ('Publish build info') {
+            steps {
+                rtPublishBuildInfo (
+                    serverId: 'jfrog-jenkins'
+                )
+            }
+        }
+
+        stage ('Set output resources') {
+            steps {
+                jfPipelines(
+                    outputResources: """[
+                        {
+                            "name": "pipelinesBuildInfo",
+                            "content": {
+                                "buildName": "${env.JOB_NAME}",
+                                "buildNumber": "${env.BUILD_NUMBER}"
+                            }
+                        }
+                    ]"""
+                )
+            }
+        }
     }
 }
