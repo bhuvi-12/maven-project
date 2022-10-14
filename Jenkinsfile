@@ -19,7 +19,6 @@ pipeline {
             steps { 
                 echo 'Build stage' 
                 sh 'mvn clean package'
-                // sh 'mvn -Dmaven.test.failure.ignore=true install'
             }
         }
         stage('Deploy artifacts to Artifactory'){
@@ -29,7 +28,7 @@ pipeline {
                     spec: """{
                         "files": [
                                 {
-                                    "pattern": "multibranch-pipeline2/master/build/*.jar",
+                                    "pattern": "/var/lib/jenkins/workspace/multibranch-pipeline2_${branch}/server/target/*.jar",
                                     "target": "libs-snapshot-local"
                                 }
                         ]
