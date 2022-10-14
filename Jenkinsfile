@@ -1,4 +1,12 @@
 pipeline { 
+    def server = Artifactory.server 'jfrog-jenkins'
+    def uploadSpec = """{
+    "files": [{
+                "pattern": "multibranch-pipeline2/master/build/libs/*.jar",
+                "target": "libs-snapshot-local"
+            }
+        ]
+    }"""
     agent any 
     environment {
         PATH = "$PATH:/usr/share/maven/bin"
@@ -19,6 +27,7 @@ pipeline {
         stage('Deploy artifacts to Artifactory'){
             steps{
                 echo 'This is a post-build actions'
+                server.upload(uploadSpec)
             }
         }
     }
