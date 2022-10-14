@@ -18,7 +18,7 @@ pipeline {
         }
         stage('Deploy artifacts to Artifactory'){
             steps{
-                echo 'This is a post-build actions'
+                echo 'This is a post-build actions in dev branch'
                 rtUpload(
                     serverId: 'jfrog-jenkins',
                     spec: """{
