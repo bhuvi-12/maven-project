@@ -24,7 +24,7 @@ pipeline {
                     spec: """{
                         "files": [
                                 {
-                                    "pattern": "multibranch-pipeline2::master/build/*.jar",
+                                    "pattern": "multibranch-pipeline2/master/build/*.jar",
                                     "target": "libs-snapshot-local"
                                 }
                         ]
