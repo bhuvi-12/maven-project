@@ -42,7 +42,7 @@ pipeline {
                     spec: """{
                         "files": [
                                 {
-                                    "pattern": "/var/lib/jenkins/workspace/multibranch-pipeline2_dev/webapp/target/*.jar",
+                                    "pattern": "/var/lib/jenkins/workspace/multibranch-pipeline2_dev/webapp/target/*.war",
                                     "target": "libs-snapshot-local"
                                 }
                         ]
