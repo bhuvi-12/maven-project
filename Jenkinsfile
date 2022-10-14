@@ -109,7 +109,7 @@ pipeline {
             steps{
                 echo 'Development deployment'
                 script {
-                    deploy adapters: [tomcat9(credentialsId: 'tomcat-new', path: '', url: 'http://apachetomcatserver.westus3.cloudapp.azure.com:8080/')], contextPath: '/pipeline', onFailure: false, war: 'webapp/target/*.war' 
+                    deploy adapters: [tomcat9(credentialsId: 'tomcat-new', path: '', url: 'http://apachetomcatserver.westus3.cloudapp.azure.com:8080/')], contextPath: '', onFailure: false, war: 'webapp/target/*.war' 
                 }
             }
         }
