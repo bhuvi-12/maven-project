@@ -19,7 +19,8 @@ pipeline {
             steps { 
                 echo 'Build stage' 
                 sh 'mvn -Dmaven.test.failure.ignore=true install'
-                dir("/var/lib/jenkins/workspace/multibranch-pipeline2_${branch}")
+                // dir("/var/lib/jenkins/workspace/multibranch-pipeline2_${branch}")
+                // sh 'mvn -B -DskipTests clean package'
             }
         }
         stage('Deploy artifacts to Artifactory'){
