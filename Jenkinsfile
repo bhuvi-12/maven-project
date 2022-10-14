@@ -21,7 +21,7 @@ pipeline {
                 sh 'mvn clean package'
             }
         }
-        stage('Deploy artifacts to Artifactory to dev'){
+        stage('Deploy artifacts to Artifactory of DEV branch'){
             when{
                 branch 'dev'
             }
@@ -50,7 +50,7 @@ pipeline {
                 )
             }
         }
-        stage('Deploy artifacts to Artifactory to Master'){
+        stage('Deploy artifacts to Artifactory of Master branch'){
             when{
                 branch 'master'
             }
@@ -102,12 +102,15 @@ pipeline {
                 )
             }
         }
-        stage ('Deploy to production'){
+        stage ('Deploy'){
             when{
-                branch 'master'
+                branch 'dev'
             }
             steps{
-                echo 'Production deployment'
+                echo 'Development deployment'
+                script {
+                    deploy adapters: [tomcat9(credentialsId: 'tomcat-new', path: '', url: 'http://apachetomcatserver.westus3.cloudapp.azure.com:8080/')], contextPath: '/pipeline', onFailure: false, war: 'webapp/target/*.war' 
+                }
             }
         }
     }
