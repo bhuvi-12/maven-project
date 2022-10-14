@@ -66,6 +66,17 @@ pipeline {
                         ]
                     }"""
                 )
+                rtUpload(
+                    serverId: 'jfrog-jenkins',
+                    spec: """{
+                        "files": [
+                                {
+                                    "pattern": "/var/lib/jenkins/workspace/multibranch-pipeline2_master/webapp/target/*.war",
+                                    "target": "libs-snapshot-local"
+                                }
+                        ]
+                    }"""
+                )
             }
         }
         stage ('Publish build info') {
