@@ -20,11 +20,14 @@ pipeline {
             steps{
                 echo 'This is a post-build actions'
                 rtUpload(
+                    def rtMaven = Artifactory.newMavenBuild()
+                    def buildInfo = rtMaven.run pom: 'maven-example/pom.xml', goals: 'clean install'
+                    rtMaven.deployer.deployArtifacts buildInfo
                     serverId: 'jfrog-jenkins',
                     spec: """{
                         "files": [
                                 {
-                                    "pattern": "multibranch-pipeline2/master/build/libs/*.jar",
+                                    "pattern": "multibranch-pipeline2::master/build/libs/*.jar",
                                     "target": "libs-snapshot-local"
                                 }
                         ]
