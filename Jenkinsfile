@@ -1,19 +1,26 @@
 pipeline { 
     agent any 
+    tools{
+        maven "MAVEN"
+        jdk "JDK"
+    }
     environment {
         PATH = "$PATH:/usr/share/maven/bin"
     } 
     stages { 
-        stage('Build') { 
-            steps { 
-               echo 'Build stage' 
-            }
-        }
         stage('SonarQube analysis') {
             steps{
                 withSonarQubeEnv('SonarQube-8.9.9') { 
                     sh "mvn sonar:sonar"
                 }
+            }
+        }
+        stage('Build') { 
+            steps { 
+               echo 'Build stage' 
+            //    sh 'mvn -Dmaven.test.failure.ignore=true install'
+                dir("/var/lib/jenkins/workspace/multibranch-pipeline2_${branch}")
+                sh 'mvn -B -DskipTests clean package'
             }
         }
         stage('Deploy artifacts to Artifactory'){
