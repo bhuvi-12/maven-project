@@ -1,14 +1,13 @@
 pipeline { 
     agent any 
+    tools{
+        maven "maven"
+        jdk "JDK"
+    }
     environment {
         PATH = "$PATH:/usr/share/maven/bin"
     } 
     stages { 
-        stage('Build') { 
-            steps { 
-               echo 'This is a minimal pipeline.' 
-            }
-        }
         stage('SonarQube analysis') {
             steps{
                 withSonarQubeEnv('SonarQube-8.9.9') { 
@@ -16,15 +15,52 @@ pipeline {
                 }
             }
         }
-        stage('Deploy artifacts to Artifactory'){
+        stage('Build') { 
+            steps { 
+                echo 'Build stage' 
+                sh 'mvn clean package'
+            }
+        }
+        stage('Deploy artifacts to Artifactory to dev'){
+            when{
+                branch 'dev'
+            }
             steps{
-                echo 'This is a post-build actions in dev branch'
                 rtUpload(
                     serverId: 'jfrog-jenkins',
                     spec: """{
                         "files": [
                                 {
-                                    "pattern": "multibranch-pipeline2/master/build/*.jar",
+                                    "pattern": "/var/lib/jenkins/workspace/multibranch-pipeline2_dev/server/target/*.jar",
+                                    "target": "libs-snapshot-local"
+                                }
+                        ]
+                    }"""
+                )
+                rtUpload(
+                    serverId: 'jfrog-jenkins',
+                    spec: """{
+                        "files": [
+                                {
+                                    "pattern": "/var/lib/jenkins/workspace/multibranch-pipeline2_dev/webapp/target/*.war",
+                                    "target": "libs-snapshot-local"
+                                }
+                        ]
+                    }"""
+                )
+            }
+        }
+        stage('Deploy artifacts to Artifactory to Master'){
+            when{
+                branch 'master'
+            }
+            steps{
+                rtUpload(
+                    serverId: 'jfrog-jenkins',
+                    spec: """{
+                        "files": [
+                                {
+                                    "pattern": "/var/lib/jenkins/workspace/multibranch-pipeline2_master/server/target/*.jar",
                                     "target": "libs-snapshot-local"
                                 }
                         ]
