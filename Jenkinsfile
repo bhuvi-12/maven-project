@@ -2,7 +2,6 @@ pipeline {
     agent any 
     tools{
         maven "maven"
-        jdk "JDK"
     }
     environment {
         PATH = "$PATH:/usr/share/maven/bin"
