@@ -14,9 +14,6 @@ pipeline {
             }
         }
         stage ('Deploy'){
-            when{
-                branch 'dev'
-            }
             steps{
                 echo 'Development deployment'
                 script {
