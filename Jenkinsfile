@@ -12,14 +12,14 @@ pipeline {
                 sh 'mvn clean package'
             }
         }
-        stage('SonarQube analysis'){
+        stage('Code Analysis'){
             steps{
                 withSonarQubeEnv('SonarQube-8.9.9') { 
                     sh "mvn sonar:sonar"
                 }
             }
         }
-        stage('Deploy artifacts to Artifactory'){
+        stage('Push artifacts'){
             when{
                 branch 'dev'
             }
@@ -48,13 +48,6 @@ pipeline {
                 )
             }
         }
-        // stage ('Publish build info') {
-        //     steps {
-        //         rtPublishBuildInfo (
-        //             serverId: 'jfrog-server'
-        //         )
-        //     }
-        // }
         stage ('Deploy'){
             steps{
                 echo 'Development deployment'
