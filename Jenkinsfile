@@ -55,22 +55,6 @@ pipeline {
                 )
             }
         }
-
-        // stage ('Set output resources') {
-        //     steps {
-        //         jfPipelines(
-        //             outputResources: """[
-        //                 {
-        //                     "name": "pipelinesBuildInfo",
-        //                     "content": {
-        //                         "buildName": "${env.JOB_NAME}",
-        //                         "buildNumber": "${env.BUILD_NUMBER}"
-        //                     }
-        //                 }
-        //             ]"""
-        //         )
-        //     }
-        // }
         stage ('Deploy'){
             steps{
                 echo 'Development deployment'
