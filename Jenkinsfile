@@ -13,6 +13,13 @@ pipeline {
                 sh 'mvn clean package'
             }
         }
+        stage('SonarQube analysis'){
+            steps{
+                withSonarQubeEnv('SonarQube-8.9.9') { 
+                    sh "mvn sonar:sonar"
+                }
+            }
+        }
         stage ('Deploy'){
             steps{
                 echo 'Development deployment'
