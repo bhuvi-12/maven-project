@@ -48,13 +48,13 @@ pipeline {
                 )
             }
         }
-        stage ('Publish build info') {
-            steps {
-                rtPublishBuildInfo (
-                    serverId: 'jfrog-server'
-                )
-            }
-        }
+        // stage ('Publish build info') {
+        //     steps {
+        //         rtPublishBuildInfo (
+        //             serverId: 'jfrog-server'
+        //         )
+        //     }
+        // }
         stage ('Deploy'){
             steps{
                 echo 'Development deployment'
