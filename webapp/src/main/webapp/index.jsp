@@ -13,11 +13,11 @@
     <br>
     
     <label for="mobile"><b>Enter mobile</b></label>
-    <input type="text" placeholder="Enter Mobile number" name="mobile" id="mobile" required>
+    <input type="text" placeholder="Enter Mobile Number" name="mobile" id="mobile" required>
     <br>
 
     <label for="email"><b>Enter Email</b></label>
-    <input type="text" placeholder="Enter Email address" name="email" id="email" required>
+    <input type="text" placeholder="Enter Email Address" name="email" id="email" required>
     <br>
 
     <label for="psw"><b>Password</b></label>
