@@ -12,7 +12,7 @@ pipeline {
                 sh 'mvn clean package'
             }
         }
-        stage('Code Analysis'){
+        stage('Code analysis'){
             steps{
                 withSonarQubeEnv('SonarQube-8.9.9') { 
                     sh "mvn sonar:sonar"
@@ -45,6 +45,13 @@ pipeline {
                                 }
                         ]
                     }"""
+                )
+            }
+        }
+        stage ('Publish build info') {
+            steps {
+                rtPublishBuildInfo (
+                    serverId: 'jfrog-server'
                 )
             }
         }
