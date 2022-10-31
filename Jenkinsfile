@@ -9,7 +9,6 @@ pipeline {
     stages { 
         stage('Build') { 
             steps { 
-                echo 'Build stage' 
                 sh 'mvn clean package'
             }
         }
@@ -57,21 +56,21 @@ pipeline {
             }
         }
 
-        stage ('Set output resources') {
-            steps {
-                jfPipelines(
-                    outputResources: """[
-                        {
-                            "name": "pipelinesBuildInfo",
-                            "content": {
-                                "buildName": "${env.JOB_NAME}",
-                                "buildNumber": "${env.BUILD_NUMBER}"
-                            }
-                        }
-                    ]"""
-                )
-            }
-        }
+        // stage ('Set output resources') {
+        //     steps {
+        //         jfPipelines(
+        //             outputResources: """[
+        //                 {
+        //                     "name": "pipelinesBuildInfo",
+        //                     "content": {
+        //                         "buildName": "${env.JOB_NAME}",
+        //                         "buildNumber": "${env.BUILD_NUMBER}"
+        //                     }
+        //                 }
+        //             ]"""
+        //         )
+        //     }
+        // }
         stage ('Deploy'){
             steps{
                 echo 'Development deployment'
