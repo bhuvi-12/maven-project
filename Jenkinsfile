@@ -30,7 +30,7 @@ pipeline {
                     spec: """{
                         "files": [
                                 {
-                                    "pattern": "/var/lib/jenkins/workspace/multibranch-pipeline2_dev/server/target/*.jar",
+                                    "pattern": "/var/lib/jenkins/workspace/sample-java-project_dev/server/target/*.jar",
                                     "target": "libs-snapshot-local"
                                 }
                         ]
@@ -41,7 +41,7 @@ pipeline {
                     spec: """{
                         "files": [
                                 {
-                                    "pattern": "/var/lib/jenkins/workspace/multibranch-pipeline2_dev/webapp/target/*.war",
+                                    "pattern": "/var/lib/jenkins/workspace/sample-java-project_dev/webapp/target/*.war",
                                     "target": "libs-snapshot-local"
                                 }
                         ]
