@@ -26,7 +26,7 @@ pipeline {
             }
             steps{
                 rtUpload(
-                    serverId: 'jfrog-jenkins',
+                    serverId: 'jfrog-server',
                     spec: """{
                         "files": [
                                 {
@@ -37,7 +37,7 @@ pipeline {
                     }"""
                 )
                 rtUpload(
-                    serverId: 'jfrog-jenkins',
+                    serverId: 'jfrog-server',
                     spec: """{
                         "files": [
                                 {
@@ -52,7 +52,7 @@ pipeline {
         stage ('Publish build info') {
             steps {
                 rtPublishBuildInfo (
-                    serverId: 'jfrog-jenkins'
+                    serverId: 'jfrog-server'
                 )
             }
         }
