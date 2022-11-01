@@ -7,6 +7,15 @@ pipeline {
         PATH = "$PATH:/usr/share/maven/bin"
     } 
     stages { 
+        stage('Code Checkout') {
+            steps {
+                checkout([
+                    $class: 'GitSCM', 
+                    branches: [[name: '*/dev']], 
+                    userRemoteConfigs: [[url: 'https://github.com/bhuvi-12/maven-project']]
+                ])
+            }
+        }
         stage('Build') { 
             steps { 
                 sh 'mvn clean package'
