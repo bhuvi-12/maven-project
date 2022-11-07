@@ -2,47 +2,50 @@ pipeline {
     agent any 
     tools{
         maven "maven"
-        jdk "JDK"
     }
     environment {
         PATH = "$PATH:/usr/share/maven/bin"
     } 
     stages { 
-        stage('SonarQube analysis') {
+        stage('Code Checkout') {
+            steps {
+                git url:"https://github.com/bhuvi-12/maven-project.git"
+            }
+        }
+        stage('Build') { 
+            steps { 
+                sh 'mvn clean package'
+            }
+        }
+        stage('Code analysis'){
             steps{
                 withSonarQubeEnv('SonarQube-8.9.9') { 
                     sh "mvn sonar:sonar"
                 }
             }
         }
-        stage('Build') { 
-            steps { 
-                echo 'Build stage' 
-                sh 'mvn clean package'
-            }
-        }
-        stage('Deploy artifacts to Artifactory of DEV branch'){
+        stage('Push artifacts from Dev branch'){
             when{
                 branch 'dev'
             }
             steps{
                 rtUpload(
-                    serverId: 'jfrog-jenkins',
+                    serverId: 'jfrog-server',
                     spec: """{
                         "files": [
                                 {
-                                    "pattern": "/var/lib/jenkins/workspace/multibranch-pipeline2_dev/server/target/*.jar",
+                                    "pattern": "/var/lib/jenkins/workspace/sample-java-project_dev/server/target/*.jar",
                                     "target": "libs-snapshot-local"
                                 }
                         ]
                     }"""
                 )
                 rtUpload(
-                    serverId: 'jfrog-jenkins',
+                    serverId: 'jfrog-server',
                     spec: """{
                         "files": [
                                 {
-                                    "pattern": "/var/lib/jenkins/workspace/multibranch-pipeline2_dev/webapp/target/*.war",
+                                    "pattern": "/var/lib/jenkins/workspace/sample-java-project_dev/webapp/target/*.war",
                                     "target": "libs-snapshot-local"
                                 }
                         ]
@@ -50,28 +53,28 @@ pipeline {
                 )
             }
         }
-        stage('Deploy artifacts to Artifactory of Master branch'){
+        stage('Push artifacts from Master branch'){
             when{
                 branch 'master'
             }
             steps{
                 rtUpload(
-                    serverId: 'jfrog-jenkins',
+                    serverId: 'jfrog-server',
                     spec: """{
                         "files": [
                                 {
-                                    "pattern": "/var/lib/jenkins/workspace/multibranch-pipeline2_master/server/target/*.jar",
+                                    "pattern": "/var/lib/jenkins/workspace/sample-java-project_master/server/target/*.jar",
                                     "target": "libs-snapshot-local"
                                 }
                         ]
                     }"""
                 )
                 rtUpload(
-                    serverId: 'jfrog-jenkins',
+                    serverId: 'jfrog-server',
                     spec: """{
                         "files": [
                                 {
-                                    "pattern": "/var/lib/jenkins/workspace/multibranch-pipeline2_master/webapp/target/*.war",
+                                    "pattern": "/var/lib/jenkins/workspace/sample-java-project_master/webapp/target/*.war",
                                     "target": "libs-snapshot-local"
                                 }
                         ]
@@ -82,34 +85,18 @@ pipeline {
         stage ('Publish build info') {
             steps {
                 rtPublishBuildInfo (
-                    serverId: 'jfrog-jenkins'
-                )
-            }
-        }
-
-        stage ('Set output resources') {
-            steps {
-                jfPipelines(
-                    outputResources: """[
-                        {
-                            "name": "pipelinesBuildInfo",
-                            "content": {
-                                "buildName": "${env.JOB_NAME}",
-                                "buildNumber": "${env.BUILD_NUMBER}"
-                            }
-                        }
-                    ]"""
+                    serverId: 'jfrog-server'
                 )
             }
         }
         stage ('Deploy'){
             when{
-                branch 'dev'
+                branch 'master'
             }
             steps{
                 echo 'Development deployment'
                 script {
-                    deploy adapters: [tomcat9(credentialsId: 'tomcat-new', path: '', url: 'http://apachetomcatserver.westus3.cloudapp.azure.com:8080/')], contextPath: '', onFailure: false, war: 'webapp/target/*.war' 
+                    deploy adapters: [tomcat9(credentialsId: 'tomcat-cred', path: '', url: 'http://tomcatserver.centralindia.cloudapp.azure.com:8080/')], contextPath: '', onFailure: false, war: 'webapp/target/*.war' 
                 }
             }
         }
