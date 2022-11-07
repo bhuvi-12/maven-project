@@ -20,11 +20,11 @@ pipeline {
         stage('Code analysis'){
             steps{
                 withSonarQubeEnv('SonarQube-8.9.9') { 
-                    sh "./gradlew sonarqube"
+                    sh "mvn sonar:sonar"
                 }
             }
         }
-        stage('Push artifacts'){
+        stage('Push artifacts from Dev branch'){
             when{
                 branch 'dev'
             }
@@ -53,6 +53,35 @@ pipeline {
                 )
             }
         }
+        stage('Push artifacts from Master branch'){
+            when{
+                branch 'master'
+            }
+            steps{
+                rtUpload(
+                    serverId: 'jfrog-server',
+                    spec: """{
+                        "files": [
+                                {
+                                    "pattern": "/var/lib/jenkins/workspace/sample-java-project_master/server/target/*.jar",
+                                    "target": "libs-snapshot-local"
+                                }
+                        ]
+                    }"""
+                )
+                rtUpload(
+                    serverId: 'jfrog-server',
+                    spec: """{
+                        "files": [
+                                {
+                                    "pattern": "/var/lib/jenkins/workspace/sample-java-project_master/webapp/target/*.war",
+                                    "target": "libs-snapshot-local"
+                                }
+                        ]
+                    }"""
+                )
+            }
+        }
         stage ('Publish build info') {
             steps {
                 rtPublishBuildInfo (
@@ -61,6 +90,9 @@ pipeline {
             }
         }
         stage ('Deploy'){
+            when{
+                branch 'master'
+            }
             steps{
                 echo 'Development deployment'
                 script {
