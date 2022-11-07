@@ -20,7 +20,7 @@ pipeline {
         stage('Code analysis'){
             steps{
                 withSonarQubeEnv('SonarQube-8.9.9') { 
-                    sh "mvn sonar:sonar"
+                    sh "./gradlew sonarqube"
                 }
             }
         }
