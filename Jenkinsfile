@@ -9,11 +9,7 @@ pipeline {
     stages { 
         stage('Code Checkout') {
             steps {
-                checkout([
-                    $class: 'GitSCM', 
-                    branches: [[name: '*/dev']], 
-                    userRemoteConfigs: [[url: 'https://github.com/bhuvi-12/maven-project']]
-                ])
+                git url:"https://github.com/bhuvi-12/maven-project.git"
             }
         }
         stage('Build') { 
