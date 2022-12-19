@@ -1,0 +1,45 @@
+pipeline {
+    agent any
+    tools{
+        maven "maven"
+    }
+    environment {
+        PATH = "$PATH:/usr/share/maven/bin"
+    }
+    stages {
+        stage('Code Checkout') {
+            steps {
+                git url:"https://github.com/dsrdsr90/web_proj_working.git"
+            }
+        }
+        stage('Build') { 
+            steps { 
+                sh 'mvn clean package'
+            }
+        }
+        stage('Push artifacts'){
+            steps{
+                rtUpload(
+                    serverId: 'jfrog-server',
+                    spec: """{
+                        "files": [
+                                {
+                                    "pattern": "/home/ubuntu/.jenkins/workspace/pipeline_p1/webapp/target/*.war",
+                                    "target": "libs-snapshot-local"
+                                }
+                        ]
+                    }"""
+                )
+            }
+        }
+        
+        
+       stage ('Publish build info') {
+            steps {
+                rtPublishBuildInfo (
+                    serverId: 'jfrog-server'
+                )
+            }
+        }
+        
+    }
